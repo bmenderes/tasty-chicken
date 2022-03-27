@@ -1,9 +1,16 @@
 <template>
   <app-layout title="Articles">
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Articles
-      </h2>
+      <div class="flex items-center">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+          Articles
+        </h2>
+        <div class="ml-auto">
+          <Link :href="route('articles.create')" class="ml-auto">
+            <jet-button type="button"> Create a New Article </jet-button>
+          </Link>
+        </div>
+      </div>
     </template>
 
     <div class="py-12">
@@ -36,11 +43,13 @@
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link } from "@inertiajs/inertia-vue3";
+import JetButton from "@/Jetstream/Button.vue";
 
 export default defineComponent({
   components: {
     AppLayout,
     Link,
+    JetButton,
   },
   props: ["articles"],
 });
