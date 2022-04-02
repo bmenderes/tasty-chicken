@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Article;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateArticleRequest extends FormRequest
 {
@@ -12,8 +14,13 @@ class UpdateArticleRequest extends FormRequest
      * @return bool
      */
     public function authorize()
+
+
     {
-        return false;
+        $article = $this->route('article');
+
+        return $article && Auth::user()->can('update', $article);
+        return $article && $article->user_id === auth()->id();
     }
 
     /**
@@ -24,7 +31,8 @@ class UpdateArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
         ];
     }
 }

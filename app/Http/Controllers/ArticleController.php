@@ -90,7 +90,13 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
-        //
+        if (auth()->id() !== $article->user_id) {
+            abort(403);
+        }
+
+        $article->update($request->validated());
+
+        return redirect()->back();
     }
 
     /**
