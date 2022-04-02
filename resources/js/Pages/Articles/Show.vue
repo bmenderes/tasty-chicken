@@ -13,6 +13,9 @@
           >
             Editing
           </jet-secondary-button>
+          <jet-danger-button @click.prevent="deleting = true" type="button">
+            Delete
+          </jet-danger-button>
         </div>
       </div>
     </template>
@@ -25,6 +28,8 @@
           </div>
         </div>
       </div>
+
+      <!-- Edit Form -->
       <jet-form-section v-else @submitted="submitForm">
         <template #title> Update Article </template>
 
@@ -84,6 +89,29 @@
           </jet-button>
         </template>
       </jet-form-section>
+      <!-- Delete Account Confirmation Modal -->
+      <jet-dialog-modal :show="deleting" @close="deleting = false">
+        <template #title> Delete Article </template>
+
+        <template #content>
+          Are you sure you want to delete your article?
+        </template>
+
+        <template #footer>
+          <jet-secondary-button @click="deleting = false">
+            Cancel
+          </jet-secondary-button>
+
+          <jet-danger-button
+            class="ml-3"
+            @click="deleteArticle"
+            :class="{ 'opacity-25': deleteForm.processing }"
+            :disabled="deleteForm.processing"
+          >
+            Delete Article
+          </jet-danger-button>
+        </template>
+      </jet-dialog-modal>
     </div>
   </app-layout>
 </template>
@@ -99,9 +127,11 @@ import JetInputError from "@/Jetstream/InputError.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import JetActionMessage from "@/Jetstream/ActionMessage.vue";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton.vue";
-import JetDangerButton from "@/Jetstream/SecondaryButton.vue";
+import JetDangerButton from "@/Jetstream/DangerButton.vue";
+import JetDialogModal from "@/Jetstream/DialogModal.vue";
 
 export default defineComponent({
+  props: ["article"],
   components: {
     AppLayout,
     JetActionMessage,
@@ -112,14 +142,17 @@ export default defineComponent({
     JetLabel,
     JetSecondaryButton,
     JetDangerButton,
+    JetDialogModal,
   },
   data() {
     return {
       editing: false,
+      deleting: false,
       form: this.$inertia.form({
         title: this.article.title,
         body: this.article.body,
       }),
+      deleteForm: this.$inertia.form({}),
     };
   },
   methods: {
@@ -133,7 +166,9 @@ export default defineComponent({
         },
       });
     },
+    deleteArticle() {
+      this.deleteForm.delete(this.route("articles.destroy", this.article));
+    },
   },
-  props: ["article"],
 });
 </script>
