@@ -107,7 +107,9 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        if ($article->user_id !== auth()->id())
+        if (
+            auth()->user()->cant('delete', $article)
+        )
             return abort(403);
 
         $article->delete();

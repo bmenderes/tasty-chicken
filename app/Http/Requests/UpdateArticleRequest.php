@@ -17,10 +17,11 @@ class UpdateArticleRequest extends FormRequest
 
 
     {
-        $article = $this->route('article');
 
-        return $article && Auth::user()->can('update', $article);
-        return $article && $article->user_id === auth()->id();
+        return auth()->user()->can(
+            'update',
+            $this->route('article')
+        );
     }
 
     /**
