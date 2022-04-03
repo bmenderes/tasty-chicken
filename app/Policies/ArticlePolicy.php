@@ -5,6 +5,8 @@ namespace App\Policies;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Str;
+
 
 
 class ArticlePolicy
@@ -12,13 +14,15 @@ class ArticlePolicy
     use HandlesAuthorization;
 
     /**
-     * Before all the policies, administartor can do anything
-     * 
-     * @param User $user
+     * Perform pre-authorization checks.
+     *
+     * @param  \App\Models\User  $user
+     * @param  string  $ability
+     * @return void|bool
      */
-    public function before(User $user)
+    public function before(User $user, $ability)
     {
-        if ($user->id === 1) {
+        if (str::of($user->email)->endsWith('@admin.com')) {
             return true;
         }
     }

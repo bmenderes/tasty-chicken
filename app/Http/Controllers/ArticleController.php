@@ -75,8 +75,8 @@ class ArticleController extends Controller
     {
 
         $permissions = [
-            'canUserEdit' => auth()->user()->can('update', Article::class),
-            'canUserDelete' => auth()->user()->can('delete', Article::class),
+            'update' => auth()->user()->can('update', $article),
+            'delete' => auth()->user()->can('delete', $article),
         ];
 
         return Inertia::render('Articles/Show', compact('article', 'permissions'));

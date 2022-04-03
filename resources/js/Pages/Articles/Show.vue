@@ -6,14 +6,20 @@
           {{ article.title }}
         </h2>
 
-        <div v-if="permissions.canUserEdit ">
+        <div>
           <jet-secondary-button
             @click.prevent="editing = !editing"
             type="button"
+            v-if="permissions.update"
           >
-            Editing 
+            Editing
           </jet-secondary-button>
-          <jet-danger-button @click.prevent="deleting = true" type="button">
+          <jet-danger-button
+            @click.prevent="deleting = true"
+            type="button"
+            class="ml-3"
+            v-if="permissions.delete"
+          >
             Delete
           </jet-danger-button>
         </div>
