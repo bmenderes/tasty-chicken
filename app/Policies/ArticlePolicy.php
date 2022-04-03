@@ -12,6 +12,18 @@ class ArticlePolicy
     use HandlesAuthorization;
 
     /**
+     * Before all the policies, administartor can do anything
+     * 
+     * @param User $user
+     */
+    public function before(User $user)
+    {
+        if ($user->id === 1) {
+            return true;
+        }
+    }
+
+    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user

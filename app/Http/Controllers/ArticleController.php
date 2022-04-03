@@ -12,6 +12,18 @@ use Inertia\Inertia;
 class ArticleController extends Controller
 {
     /**
+     * Constructor
+     * 
+     * @return void
+     */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->authorizeResource(Article::class);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -19,7 +31,6 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::all();
-
         return Inertia::render('Articles/Index', [
             'articles' => $articles,
         ]);
@@ -62,12 +73,13 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        // return Inertia::render('Articles/Show',[
 
-        //     'article' => $article,
-        // ]);
+        $permissions = [
+            'canUserEdit' => auth()->user()->can('update', Article::class),
+            'canUserDelete' => auth()->user()->can('delete', Article::class),
+        ];
 
-        return Inertia::render('Articles/Show', compact('article'));
+        return Inertia::render('Articles/Show', compact('article', 'permissions'));
     }
 
     /**
@@ -107,10 +119,11 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        if (
-            auth()->user()->cant('delete', $article)
-        )
-            return abort(403);
+        //bu kisim automatic olarak __construct $this->authorizeResource(Article::class); sayesinde ekleniyor
+        // if (
+        //     auth()->user()->cant('delete', $article)
+        // )
+        //     return abort(403);
 
         $article->delete();
 

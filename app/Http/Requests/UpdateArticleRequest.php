@@ -14,10 +14,8 @@ class UpdateArticleRequest extends FormRequest
      * @return bool
      */
     public function authorize()
-
-
     {
-
+        //Controller __construct icerisinde tanimlanmasi sebebi ile kontrol edildiginden iptal edilebilir. ve direk return true şeklinde donebilir.
         return auth()->user()->can(
             'update',
             $this->route('article')
